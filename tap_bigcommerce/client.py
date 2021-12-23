@@ -118,12 +118,13 @@ class BigCommerce(Client):
         is queried by day to ensure consistent replication key
         """
 
-        for start, end in self.iterdates(bookmark):
-            for customer in self.api.resource('customers', {
-                    'min_date_modified': start.isoformat(),
-                    'max_date_modified': end.isoformat()
-            }):
-                yield customer
+#         for start, end in self.iterdates(bookmark):
+        for customer in self.api.resource('customers', {
+                'date_modified:min': bookmark.isoformat(),
+                'sort': 'date_modified',
+                'direction': 'asc'
+        }):
+            yield customer
 
     def coupons(self):
 
